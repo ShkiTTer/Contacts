@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.example.contacts.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ContactsFragment : Fragment() {
 
-    private lateinit var contactsViewModel: ContactsViewModel
+    private val contactsViewModel: ContactsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +23,6 @@ class ContactsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        contactsViewModel =
-            ViewModelProviders.of(this).get(ContactsViewModel::class.java)
-
         return inflater.inflate(R.layout.fragment_contacts, container, false)
     }
 

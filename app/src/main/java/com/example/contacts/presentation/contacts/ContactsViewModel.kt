@@ -1,7 +1,8 @@
 package com.example.contacts.presentation.contacts
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 
-class ContactsViewModel : ViewModel() {
+class ContactsViewModel(private val app: Application) : AndroidViewModel(app) {
 
 }
