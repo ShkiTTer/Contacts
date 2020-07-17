@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.example.contacts"
+        minSdkVersion 25
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Android Arch
+    def lifecycleVersion = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+
+    // Koin
+    def koinVersion = "2.0.1"
+    implementation "org.koin:koin-core:$koinVersion"
+    implementation "org.koin:koin-android:$koinVersion"
+    implementation "org.koin:koin-androidx-scope:$koinVersion"
+    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+
+    // Room
+    def roomVer = "2.2.3"
+    api "androidx.room:room-runtime:$roomVer"
+    api "androidx.room:room-ktx:$roomVer"
+    kapt "androidx.room:room-compiler:$roomVer"
+
+    // Glide
+    def glideVersion = "4.9.0"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Databinding
+    kapt 'com.android.databinding:compiler:3.1.4'
+
+    // Runtime permissions
+    implementation 'com.karumi:dexter:6.0.1'
+}
