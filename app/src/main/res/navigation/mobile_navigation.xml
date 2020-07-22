@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/nav_contacts"
-        android:name="com.example.contacts.presentation.contacts.ContactsFragment"
+        android:name="com.example.contacts.presentation.contactslist.ContactsListFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_contacts" />
+        tools:layout="@layout/fragment_contacts_list" />
 
 </navigation>

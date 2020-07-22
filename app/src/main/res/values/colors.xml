@@ -6,4 +6,9 @@
 
     <color name="colorMainText">#000000</color>
     <color name="colorHeaderText">#61000000</color>
+
+    <color name="colorGrayPrimary">#F5F5F5</color>
+    <color name="colorGrayPrimaryDark">#F5F5F5</color>
+    <color name="colorGrayAccent">#4A90E2</color>
+    <color name="colorDivider">#CECECE</color>
 </resources>

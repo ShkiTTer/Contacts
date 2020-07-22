@@ -1,5 +1,6 @@
 package com.example.contacts.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -11,8 +12,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.contacts.R
+import com.example.contacts.presentation.contact.ContactActivity
+import com.example.contacts.presentation.contactslist.ContactsListFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ContactsListFragment.ContactsListNavigation {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -40,5 +43,11 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onNewClick() {
+        Intent(this, ContactActivity::class.java).apply {
+            startActivity(this)
+        }
     }
 }

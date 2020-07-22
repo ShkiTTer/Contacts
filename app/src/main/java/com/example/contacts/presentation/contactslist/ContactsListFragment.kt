@@ -1,35 +1,46 @@
-package com.example.contacts.presentation.contacts
+package com.example.contacts.presentation.contactslist
 
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.contacts.R
+import kotlinx.android.synthetic.main.fragment_contacts_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ContactsFragment : Fragment() {
-
-    private val contactsViewModel: ContactsViewModel by viewModel()
+class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
+    private val contactsListViewModel: ContactsListViewModel by viewModel()
+    private lateinit var callback: ContactsListNavigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_contacts, container, false)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = context as ContactsListNavigation
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main, menu)
         initSearchView(menu)
+    }
+
+    private fun initView() {
+        fabNew.setOnClickListener {
+            callback.onNewClick()
+        }
     }
 
     private fun initSearchView(menu: Menu) {
@@ -59,5 +70,9 @@ class ContactsFragment : Fragment() {
                 }
             })
         }
+    }
+
+    interface ContactsListNavigation {
+        fun onNewClick()
     }
 }

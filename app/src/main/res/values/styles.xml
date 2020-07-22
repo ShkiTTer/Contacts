@@ -17,4 +17,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="GrayTheme.NoActionBar" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/colorGrayPrimary</item>
+        <item name="colorPrimaryDark">@color/colorGrayPrimaryDark</item>
+        <item name="colorAccent">@color/colorGrayAccent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>
