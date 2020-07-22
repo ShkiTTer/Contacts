@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Contacts</string>
     <string name="title_activity_main">Contacts</string>
+    <string name="title_activity_edit_contact">Edit contact</string>
+    <string name="title_activity_add_contact">Create contact</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,6 +12,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_search">Search contact</string>
     <string name="action_favourite">Favourite</string>
+    <string name="action_delete">Delete</string>
 
     <string name="menu_home">Contacts</string>
     <string name="temp_header">A</string>
@@ -17,4 +20,8 @@
     <string name="text_phone">Phone</string>
     <string name="text_ringtone">Ringtone</string>
     <string name="text_note">Note</string>
+    <string name="button_change_avatar">Change</string>
+    <string name="hint_first_name">First name</string>
+    <string name="hint_last_name">Last name</string>
+    <string name="hint_phone">Phone</string>
 </resources>

@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), ContactsListFragment.ContactsListNavig
     }
 
     override fun onNewClick() {
-        Intent(this, ContactActivity::class.java).apply {
+        ContactActivity.newIntent(this).apply {
             startActivity(this)
         }
     }
