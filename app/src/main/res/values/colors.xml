@@ -13,4 +13,5 @@
     <color name="colorDivider">#CECECE</color>
 
     <color name="colorStroke">#979797</color>
+    <color name="colorChoiceIcon">#de000000</color>
 </resources>

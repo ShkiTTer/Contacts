@@ -25,8 +25,22 @@
     <string name="hint_last_name">Last name</string>
     <string name="hint_phone">Phone</string>
 
-    <string name="title_dialog_add_note">Add note</string>
-    <string name="hint_add_note">Text here</string>
-    <string name="button_positive">Accept</string>
-    <string name="button_negative">Cancel</string>
+    <string name="title_dialog_note">Add note</string>
+    <string name="hint_dialog_note">Text here</string>
+    <string name="dialog_note_button_positive">Accept</string>
+    <string name="dialog_note_button_negative">Cancel</string>
+
+    <string name="title_dialog_ringtone">Select ringtone</string>
+    <string name="dialog_ringtone_button_positive">Select</string>
+    <string name="dialog_ringtone_button_negative">Cancel</string>
+
+    <string-array name="array_ringtone">
+        <item>Default</item>
+        <item>Oreo</item>
+        <item>Twix</item>
+        <item>Old phone</item>
+        <item>Galaxy</item>
+        <item>Tribal</item>
+        <item>Forest</item>
+    </string-array>
 </resources>

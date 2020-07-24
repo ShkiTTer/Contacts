@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityEditContactBinding
-import com.example.contacts.databinding.DialogNoteBinding
 import kotlinx.android.synthetic.main.activity_edit_contact.*
 import kotlinx.android.synthetic.main.dialog_note.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +29,6 @@ class EditContactActivity : AppCompatActivity() {
 
         binding.apply {
             lifecycleOwner = this@EditContactActivity
-
             contact = viewModel.contact
         }
 
@@ -52,6 +51,10 @@ class EditContactActivity : AppCompatActivity() {
         gNote.setOnClickListener {
             initNoteDialog().show()
         }
+
+        gRingtone.setOnClickListener {
+            initRingtoneDialog().show()
+        }
     }
 
     private fun initNoteDialog(): AlertDialog {
@@ -62,12 +65,33 @@ class EditContactActivity : AppCompatActivity() {
             }
 
         return AlertDialog.Builder(this)
-            .setTitle(R.string.title_dialog_add_note)
+            .setTitle(R.string.title_dialog_note)
             .setView(view)
-            .setNegativeButton(R.string.button_negative, null)
-            .setPositiveButton(R.string.button_positive) { _, _ ->
+            .setNegativeButton(R.string.dialog_note_button_negative, null)
+            .setPositiveButton(R.string.dialog_note_button_positive) { _, _ ->
                 viewModel.contact.value?.note = view.etNote.text.toString()
                 binding.invalidateAll()
             }.create()
+    }
+
+    private fun initRingtoneDialog(): AlertDialog {
+        var selectedRingtone = viewModel.ringtoneList.indexOf(viewModel.contact.value?.ringtone)
+
+        return AlertDialog.Builder(this)
+            .setTitle(R.string.title_dialog_ringtone)
+            .setSingleChoiceItems(
+                ArrayAdapter(this, R.layout.dialog_choise_item, viewModel.ringtoneList),
+                selectedRingtone
+            )
+            { _, which ->
+                selectedRingtone = which
+            }
+            .setNegativeButton(R.string.dialog_ringtone_button_negative, null)
+            .setPositiveButton(R.string.dialog_ringtone_button_positive)
+            { _, _ ->
+                viewModel.contact.value?.ringtone = viewModel.ringtoneList[selectedRingtone]
+                binding.invalidateAll()
+            }
+            .create()
     }
 }

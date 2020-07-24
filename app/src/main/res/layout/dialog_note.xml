@@ -23,7 +23,7 @@
             android:layout_margin="16dp"
             android:background="@drawable/round_view"
             android:gravity="top"
-            android:hint="@string/hint_add_note"
+            android:hint="@string/hint_dialog_note"
             android:inputType="textMultiLine|textPersonName"
             android:maxLines="3"
             android:singleLine="false"

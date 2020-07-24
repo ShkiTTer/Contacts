@@ -22,7 +22,9 @@ private val viewModelModule = module {
     }
 
     viewModel {
-        EditContactViewModel()
+        EditContactViewModel(
+            app = androidApplication()
+        )
     }
 }
 
