@@ -3,12 +3,15 @@ package com.example.contacts.presentation.editcontact
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityEditContactBinding
+import com.example.contacts.databinding.DialogNoteBinding
 import kotlinx.android.synthetic.main.activity_edit_contact.*
+import kotlinx.android.synthetic.main.dialog_note.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditContactActivity : AppCompatActivity() {
@@ -31,6 +34,7 @@ class EditContactActivity : AppCompatActivity() {
         }
 
         initToolbar()
+        initView()
     }
 
     private fun initToolbar() {
@@ -42,5 +46,28 @@ class EditContactActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             // TODO: Add or update contact
         }
+    }
+
+    private fun initView() {
+        gNote.setOnClickListener {
+            initNoteDialog().show()
+        }
+    }
+
+    private fun initNoteDialog(): AlertDialog {
+        val view = LayoutInflater.from(this)
+            .inflate(R.layout.dialog_note, null, false)
+            .apply {
+                etNote.setText(viewModel.contact.value?.note)
+            }
+
+        return AlertDialog.Builder(this)
+            .setTitle(R.string.title_dialog_add_note)
+            .setView(view)
+            .setNegativeButton(R.string.button_negative, null)
+            .setPositiveButton(R.string.button_positive) { _, _ ->
+                viewModel.contact.value?.note = view.etNote.text.toString()
+                binding.invalidateAll()
+            }.create()
     }
 }

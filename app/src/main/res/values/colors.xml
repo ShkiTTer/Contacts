@@ -11,4 +11,6 @@
     <color name="colorGrayPrimaryDark">#F5F5F5</color>
     <color name="colorGrayAccent">#4A90E2</color>
     <color name="colorDivider">#CECECE</color>
+
+    <color name="colorStroke">#979797</color>
 </resources>
