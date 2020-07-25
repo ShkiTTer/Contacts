@@ -3,23 +3,35 @@ package com.example.contacts.presentation.editcontact
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityEditContactBinding
-import kotlinx.android.synthetic.main.activity_edit_contact.*
+import com.example.contacts.presentation.common.extentions.getExtra
 import kotlinx.android.synthetic.main.dialog_note.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class EditContactActivity : AppCompatActivity() {
     companion object {
-        fun newIntent(context: Context) = Intent(context, EditContactActivity::class.java)
+        private const val EXTRA_CONTACT_ID = "contact_id"
+
+        fun newIntent(context: Context) =
+            Intent(context, EditContactActivity::class.java)
+
+        fun newIntent(context: Context, contactId: Long) =
+            Intent(context, EditContactActivity::class.java)
+                .putExtra(EXTRA_CONTACT_ID, contactId)
     }
 
-    private val viewModel: EditContactViewModel by viewModel()
+    private val viewModel: EditContactViewModel by viewModel {
+        parametersOf(getExtra(EXTRA_CONTACT_ID))
+    }
     private lateinit var binding: ActivityEditContactBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,31 +42,52 @@ class EditContactActivity : AppCompatActivity() {
         binding.apply {
             lifecycleOwner = this@EditContactActivity
             contact = viewModel.contact
+
+            setTitle(
+                if (viewModel.contactId == null)
+                    R.string.title_activity_add_contact
+                else R.string.title_activity_edit_contact
+            )
         }
 
         initToolbar()
         initView()
+        initObserver()
     }
 
     private fun initToolbar() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar.setNavigationIcon(R.drawable.done)
+        binding.toolbar.setNavigationIcon(R.drawable.done)
 
-        toolbar.setNavigationOnClickListener {
-            // TODO: Add or update contact
+        binding.toolbar.setNavigationOnClickListener {
+            viewModel.saveContact().observe(this, Observer {
+                if (it) finish()
+            })
         }
     }
 
     private fun initView() {
-        gNote.setOnClickListener {
-            initNoteDialog().show()
-        }
+        binding.apply {
+            etPhone.addTextChangedListener(
+                PhoneNumberFormattingTextWatcher(getString(R.string.phone_number_country_code))
+            )
 
-        gRingtone.setOnClickListener {
-            initRingtoneDialog().show()
+            gNote.setOnClickListener {
+                initNoteDialog().show()
+            }
+
+            gRingtone.setOnClickListener {
+                initRingtoneDialog().show()
+            }
         }
+    }
+
+    private fun initObserver() {
+        viewModel.error.observe(this, Observer {
+            initErrorDialog(it).show()
+        })
     }
 
     private fun initNoteDialog(): AlertDialog {
@@ -92,6 +125,14 @@ class EditContactActivity : AppCompatActivity() {
                 viewModel.contact.value?.ringtone = viewModel.ringtoneList[selectedRingtone]
                 binding.invalidateAll()
             }
+            .create()
+    }
+
+    private fun initErrorDialog(error: String): AlertDialog {
+        return AlertDialog.Builder(this)
+            .setTitle(R.string.title_dialog_error)
+            .setMessage(error)
+            .setPositiveButton(R.string.dialog_error_positive_button, null)
             .create()
     }
 }

@@ -1,6 +1,9 @@
 package com.example.contacts.data.contact
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.example.contacts.data.common.entity.ContactEntity
 
 @Dao

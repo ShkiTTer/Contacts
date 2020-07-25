@@ -2,6 +2,10 @@ package com.example.contacts.app
 
 import com.example.contacts.data.ContactsDatabase
 import com.example.contacts.data.Database
+import com.example.contacts.data.contact.ContactDbRepositoryImpl
+import com.example.contacts.domain.contact.ContactUseCaseImpl
+import com.example.contacts.domain.contact.IContactDbRepository
+import com.example.contacts.domain.contact.IContactUseCase
 import com.example.contacts.presentation.contact.ContactViewModel
 import com.example.contacts.presentation.contactslist.ContactsListViewModel
 import com.example.contacts.presentation.editcontact.EditContactViewModel
@@ -21,9 +25,11 @@ private val viewModelModule = module {
         ContactViewModel()
     }
 
-    viewModel {
+    viewModel { (contactId: Long?) ->
         EditContactViewModel(
-            app = androidApplication()
+            app = androidApplication(),
+            contactUseCase = get(),
+            contactId = contactId
         )
     }
 }
@@ -33,4 +39,20 @@ private val databaseModule = module {
     single { get<ContactsDatabase>().contactDao() }
 }
 
-val koinModule = listOf(databaseModule, viewModelModule)
+private val repositoryModule = module {
+    factory<IContactDbRepository> {
+        ContactDbRepositoryImpl(
+            contactDao = get()
+        )
+    }
+}
+
+private val useCaseModule = module {
+    factory<IContactUseCase> {
+        ContactUseCaseImpl(
+            contactDbRepositoryImpl = get()
+        )
+    }
+}
+
+val koinModule = listOf(databaseModule, repositoryModule, useCaseModule, viewModelModule)

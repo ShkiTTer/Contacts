@@ -34,6 +34,14 @@
     <string name="dialog_ringtone_button_positive">Select</string>
     <string name="dialog_ringtone_button_negative">Cancel</string>
 
+    <string name="phone_number_country_code">RU</string>
+
+    <string name="title_dialog_error">Application error</string>
+    <string name="error_internal">Internal error</string>
+    <string name="error_empty_fields">Please fill in the input fields</string>
+    <string name="error_save">Saving error. Try again</string>
+    <string name="dialog_error_positive_button">OK</string>
+
     <string-array name="array_ringtone">
         <item>Default</item>
         <item>Oreo</item>

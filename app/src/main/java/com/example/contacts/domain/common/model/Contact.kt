@@ -6,6 +6,6 @@ data class Contact(
     var lastName: String,
     var phone: String,
     var ringtone: String,
-    var note: String?,
+    var note: String? = null,
     var avatar: String? = null
 )
