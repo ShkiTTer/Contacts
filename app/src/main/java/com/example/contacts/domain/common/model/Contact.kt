@@ -7,5 +7,6 @@ data class Contact(
     var phone: String,
     var ringtone: String,
     var note: String? = null,
-    var avatar: String? = null
+    var avatar: String? = null,
+    val fullName: String = "$firstName $lastName"
 )

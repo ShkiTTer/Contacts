@@ -17,7 +17,8 @@ import org.koin.dsl.module
 private val viewModelModule = module {
     viewModel {
         ContactsListViewModel(
-            app = androidApplication()
+            app = androidApplication(),
+            contactUseCase = get()
         )
     }
 
