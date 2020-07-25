@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +55,25 @@ class EditContactActivity : AppCompatActivity() {
         initToolbar()
         initView()
         initObserver()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuId = if (viewModel.contactId == null) R.menu.add_menu else R.menu.edit_menu
+        menuInflater.inflate(menuId, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delete -> {
+                viewModel.deleteContact().observe(this, Observer {
+                    if (it) finish()
+                })
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initToolbar() {

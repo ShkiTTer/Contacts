@@ -35,6 +35,26 @@ class EditContactViewModel(
         else updateContact()
     }
 
+    fun deleteContact(): LiveData<Boolean> {
+        if (contactId == null) {
+            mError.value = app.getString(R.string.error_internal)
+            return MutableLiveData(false)
+        }
+
+        return contactUseCase.deleteContact(contactId).switchMap { result ->
+            liveData {
+                result
+                    .onSuccess {
+                        emit(it)
+                    }
+                    .onFailure {
+                        mError.postValue(app.getString(R.string.error_delete))
+                        emit(false)
+                    }
+            }
+        }
+    }
+
     private fun addContact(): LiveData<Boolean> {
         val contactValue = contact.value
 

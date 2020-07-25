@@ -40,6 +40,7 @@
     <string name="error_internal">Internal error</string>
     <string name="error_empty_fields">Please fill in the input fields</string>
     <string name="error_save">Saving error. Try again</string>
+    <string name="error_delete">Deleting error. Try again</string>
     <string name="dialog_error_positive_button">OK</string>
 
     <string-array name="array_ringtone">
