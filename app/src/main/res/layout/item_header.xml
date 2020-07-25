@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"
         android:text="@string/temp_header"
         android:textColor="@color/colorHeaderText"
-        android:textSize="40sp"
-        android:padding="24dp"
-        />
+        android:textSize="34sp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="14dp"
+        android:textAllCaps="true"/>
 </LinearLayout>

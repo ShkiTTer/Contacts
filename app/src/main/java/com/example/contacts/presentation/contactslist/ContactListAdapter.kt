@@ -8,7 +8,8 @@ import com.example.contacts.R
 import com.example.contacts.databinding.ItemContactBinding
 import com.example.contacts.domain.common.model.Contact
 
-class ContactListAdapter : RecyclerView.Adapter<ContactListAdapter.ViewHolder>() {
+class ContactListAdapter : RecyclerView.Adapter<ContactListAdapter.ViewHolder>(),
+    ContactListItemDecoration.HeaderCallback {
 
     private val items = mutableListOf<Contact>()
     private var onItemClickListener: OnItemClickListener? = null
@@ -22,6 +23,14 @@ class ContactListAdapter : RecyclerView.Adapter<ContactListAdapter.ViewHolder>()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
+    }
+
+    override fun isHeader(pos: Int): Boolean {
+        return pos == 0 || !getHeaderName(pos).equals(getHeaderName(pos - 1), true)
+    }
+
+    override fun getHeaderName(pos: Int): String {
+        return items[pos].fullName.first().toString()
     }
 
     fun setItems(items: List<Contact>) {

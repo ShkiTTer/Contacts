@@ -40,7 +40,6 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
         super.onResume()
 
         viewModel.contacts.observe(viewLifecycleOwner, Observer {
-            println(it)
             if (it != null) {
                 contactListAdapter.setItems(it)
             }
@@ -49,7 +48,6 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
 
     override fun onPause() {
         super.onPause()
-
         viewModel.contacts.removeObservers(viewLifecycleOwner)
     }
 
@@ -75,7 +73,9 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
                 }
             })
         }
+
         rvContacts.adapter = contactListAdapter
+        rvContacts.addItemDecoration(ContactListItemDecoration(contactListAdapter))
     }
 
     private fun initSearchView(menu: Menu) {
