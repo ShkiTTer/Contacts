@@ -12,7 +12,7 @@ interface ContactDao {
     fun getAllContacts(): List<ContactEntity>
 
     @Query("Select * From contact Where id = :contactId")
-    fun getContactById(contactId: Long): ContactEntity
+    fun getContactById(contactId: Long): ContactEntity?
 
     @Insert
     fun addContact(contact: ContactEntity)

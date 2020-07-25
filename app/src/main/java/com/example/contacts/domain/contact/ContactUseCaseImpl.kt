@@ -24,7 +24,7 @@ class ContactUseCaseImpl(
         }
     }
 
-    override fun getContactById(id: Long): LiveData<Result<Contact>> = liveData(coroutineContext) {
+    override fun getContactById(id: Long): LiveData<Result<Contact?>> = liveData(coroutineContext) {
         try {
             val data = contactDbRepositoryImpl.getContactById(id)
             emit(Result.success(data))

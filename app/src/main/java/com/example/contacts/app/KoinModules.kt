@@ -21,8 +21,12 @@ private val viewModelModule = module {
         )
     }
 
-    viewModel {
-        ContactViewModel()
+    viewModel { (contactId: Long) ->
+        ContactViewModel(
+            app = androidApplication(),
+            contactUseCase = get(),
+            contactId = contactId
+        )
     }
 
     viewModel { (contactId: Long?) ->

@@ -5,22 +5,56 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.example.contacts.R
+import com.example.contacts.databinding.ActivityContactBinding
+import com.example.contacts.presentation.common.extentions.getExtra
 import com.example.contacts.presentation.editcontact.EditContactActivity
 import kotlinx.android.synthetic.main.activity_contact.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class ContactActivity : AppCompatActivity(R.layout.activity_contact) {
+class ContactActivity : AppCompatActivity() {
     companion object {
-        fun newIntent(context: Context) = Intent(context, ContactActivity::class.java)
+        private const val EXTRA_CONTACT_ID = "contact_id"
+
+        fun newIntent(context: Context, contactId: Long) =
+            Intent(context, ContactActivity::class.java)
+                .putExtra(EXTRA_CONTACT_ID, contactId)
     }
 
-    private val viewModel: ContactViewModel by viewModel()
+    private lateinit var binding: ActivityContactBinding
+    private val viewModel: ContactViewModel by viewModel {
+        parametersOf(getExtra(EXTRA_CONTACT_ID))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_contact)
+
+        binding.apply {
+            lifecycleOwner = this@ContactActivity
+            contact = viewModel.contact
+        }
+
         initToolbar()
         initView()
+        initObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.contact.observe(this, Observer {
+            if (it == null) finish()
+        })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.contact.removeObservers(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -38,9 +72,15 @@ class ContactActivity : AppCompatActivity(R.layout.activity_contact) {
 
     private fun initView() {
         fabEdit.setOnClickListener {
-            EditContactActivity.newIntent(this).apply {
+            EditContactActivity.newIntent(this, viewModel.contactId).apply {
                 startActivity(this)
             }
         }
+    }
+
+    private fun initObserver() {
+        viewModel.error.observe(this, Observer {
+            // TODO: Show error dialog
+        })
     }
 }

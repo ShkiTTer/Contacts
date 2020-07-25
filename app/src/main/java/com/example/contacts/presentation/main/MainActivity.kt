@@ -1,19 +1,18 @@
 package com.example.contacts.presentation.main
 
-import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.example.contacts.R
-import com.example.contacts.presentation.contact.ContactActivity
 import com.example.contacts.presentation.contactslist.ContactsListFragment
+import com.example.contacts.presentation.editcontact.EditContactActivity
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), ContactsListFragment.ContactsListNavigation {
 
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity(), ContactsListFragment.ContactsListNavig
     }
 
     override fun onNewClick() {
-        ContactActivity.newIntent(this).apply {
+        EditContactActivity.newIntent(this).apply {
             startActivity(this)
         }
     }

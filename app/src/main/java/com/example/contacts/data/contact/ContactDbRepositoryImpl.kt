@@ -13,8 +13,8 @@ class ContactDbRepositoryImpl(
         return contactDao.getAllContacts().map { it.toDomain() }
     }
 
-    override fun getContactById(id: Long): Contact {
-        return contactDao.getContactById(id).toDomain()
+    override fun getContactById(id: Long): Contact? {
+        return contactDao.getContactById(id)?.toDomain()
     }
 
     override fun addContact(contact: Contact) {

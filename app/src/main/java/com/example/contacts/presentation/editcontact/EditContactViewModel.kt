@@ -21,7 +21,7 @@ class EditContactViewModel(
     val contact = if (contactId != null) {
         contactUseCase.getContactById(contactId).switchMap { result ->
             liveData {
-                result.onSuccess { emit(it.toUi()) }
+                result.onSuccess { emit(it?.toUi()) }
             }
         }
     } else MutableLiveData(ContactUi(ringtone = ringtoneList.first()))
