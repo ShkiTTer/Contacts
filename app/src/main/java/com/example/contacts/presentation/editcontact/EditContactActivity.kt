@@ -15,11 +15,12 @@ import androidx.lifecycle.Observer
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityEditContactBinding
 import com.example.contacts.presentation.common.extentions.getExtra
+import com.example.contacts.presentation.common.extentions.requirePermission
 import kotlinx.android.synthetic.main.dialog_note.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class EditContactActivity : AppCompatActivity() {
+class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelectPhotoListener {
     companion object {
         private const val EXTRA_CONTACT_ID = "contact_id"
 
@@ -76,6 +77,14 @@ class EditContactActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun takeByCamera() {
+        TODO("Not yet implemented")
+    }
+
+    override fun takeByGallery() {
+        TODO("Not yet implemented")
+    }
+
     private fun initToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -87,6 +96,11 @@ class EditContactActivity : AppCompatActivity() {
                 if (it) finish()
             })
         }
+    }
+
+    private fun showBottomSheet() {
+        SelectPhotoBottomSheet.newInstance()
+            .show(supportFragmentManager, SelectPhotoBottomSheet.TAG)
     }
 
     private fun initView() {
@@ -101,6 +115,16 @@ class EditContactActivity : AppCompatActivity() {
 
             gRingtone.setOnClickListener {
                 initRingtoneDialog().show()
+            }
+
+            btnChangeAvatar.setOnClickListener {
+                requirePermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    {
+                        showBottomSheet()
+                    },
+                    {
+                        showBottomSheet()
+                    })
             }
         }
     }
