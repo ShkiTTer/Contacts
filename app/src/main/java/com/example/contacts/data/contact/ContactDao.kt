@@ -8,7 +8,7 @@ import com.example.contacts.data.common.entity.ContactEntity
 
 @Dao
 interface ContactDao {
-    @Query("Select * From contact")
+    @Query("Select * From contact Order by firstName")
     fun getAllContacts(): List<ContactEntity>
 
     @Query("Select * From contact Where id = :contactId")
