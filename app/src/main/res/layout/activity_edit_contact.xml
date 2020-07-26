@@ -6,11 +6,11 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="com.example.contacts.presentation.common.model.ContactUi" />
+        <import type="com.example.contacts.presentation.common.model.EditContact" />
 
         <variable
             name="contact"
-            type="LiveData&lt;ContactUi>" />
+            type="LiveData&lt;EditContact>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

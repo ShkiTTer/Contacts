@@ -1,6 +1,6 @@
 package com.example.contacts.presentation.common.model
 
-data class ContactUi(
+data class EditContact(
     val id: Long? = null,
     var firstName: String = String(),
     var lastName: String = String(),

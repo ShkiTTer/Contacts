@@ -3,14 +3,13 @@ package com.example.contacts.presentation.editcontact
 import android.app.Application
 import android.net.Uri
 import android.os.Environment
-import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.lifecycle.*
 import com.example.contacts.R
 import com.example.contacts.domain.contact.IContactUseCase
 import com.example.contacts.presentation.common.converters.toDomain
 import com.example.contacts.presentation.common.converters.toUi
-import com.example.contacts.presentation.common.model.ContactUi
+import com.example.contacts.presentation.common.model.EditContact
 import com.example.contacts.presentation.common.utils.DateTimeUtils
 import java.io.File
 
@@ -34,7 +33,7 @@ class EditContactViewModel(
                 result.onSuccess { emit(it?.toUi()) }
             }
         }
-    } else MutableLiveData(ContactUi(ringtone = ringtoneList.first()))
+    } else MutableLiveData(EditContact(ringtone = ringtoneList.first()))
 
     private val mError = MutableLiveData<String>()
     val error: LiveData<String> = mError
@@ -127,7 +126,7 @@ class EditContactViewModel(
         }
     }
 
-    private fun validateContact(contactValue: ContactUi): Boolean =
+    private fun validateContact(contactValue: EditContact): Boolean =
         contactValue.firstName.isNotEmpty() && contactValue.lastName.isNotEmpty()
                 && contactValue.phone.isNotEmpty()
 }
