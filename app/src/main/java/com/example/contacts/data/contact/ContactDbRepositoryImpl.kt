@@ -28,4 +28,8 @@ class ContactDbRepositoryImpl(
     override fun deleteContact(id: Long) {
         contactDao.deleteContact(id)
     }
+
+    override fun searchContacts(query: String): List<Contact> {
+        return contactDao.searchContacts(query).map { it.toDomain() }
+    }
 }

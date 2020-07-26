@@ -20,6 +20,9 @@ interface ContactDao {
     @Update
     fun updateContact(contact: ContactEntity)
 
-    @Query("DELETE FROM contact WHERE id = :contactId")
+    @Query("Delete From contact WHERE id = :contactId")
     fun deleteContact(contactId: Long)
+
+    @Query("Select * From contact Where firstName like :query Order by firstName")
+    fun searchContacts(query: String): List<ContactEntity>
 }

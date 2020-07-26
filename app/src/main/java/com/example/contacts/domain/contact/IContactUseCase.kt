@@ -9,4 +9,5 @@ interface IContactUseCase {
     fun addContact(contact: Contact): LiveData<Result<Boolean>>
     fun updateContact(contact: Contact): LiveData<Result<Boolean>>
     fun deleteContact(id: Long): LiveData<Result<Boolean>>
+    fun searchContacts(query: String): LiveData<Result<List<Contact>>>
 }

@@ -1,9 +1,7 @@
 package com.example.contacts.presentation.contactslist
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.example.contacts.domain.contact.IContactUseCase
 
 class ContactsListViewModel(
@@ -11,10 +9,28 @@ class ContactsListViewModel(
     private val contactUseCase: IContactUseCase
 ) : AndroidViewModel(app) {
 
-    val contacts
-        get() = readContacts()
+    val searchQuery = MutableLiveData<String>(String())
+
+    val contacts = Transformations.switchMap(searchQuery) {
+        if (it.isNullOrEmpty()) {
+            readContacts()
+        } else searchContacts(it)
+    }
 
     private fun readContacts() = contactUseCase.getContacts().switchMap { result ->
+        liveData {
+            result
+                .onSuccess {
+                    emit(it)
+                }
+                .onFailure {
+
+                }
+        }
+    }
+
+
+    private fun searchContacts(query: String) = contactUseCase.searchContacts(query).switchMap { result ->
         liveData {
             result
                 .onSuccess {

@@ -43,6 +43,8 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
             if (it != null) {
                 contactListAdapter.setItems(it)
             }
+
+            println(it)
         })
     }
 
@@ -95,8 +97,7 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
 
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    // TODO: Filter list
-
+                    viewModel.searchQuery.value = newText
                     return false
                 }
 

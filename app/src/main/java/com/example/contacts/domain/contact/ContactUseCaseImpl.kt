@@ -66,4 +66,14 @@ class ContactUseCaseImpl(
         }
     }
 
+    override fun searchContacts(query: String): LiveData<Result<List<Contact>>> =
+        liveData(coroutineContext) {
+            try {
+                val data = contactDbRepositoryImpl.searchContacts(query.toLowerCase().trim())
+                emit(Result.success(data))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.failure(e))
+            }
+        }
 }
