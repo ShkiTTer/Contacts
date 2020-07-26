@@ -1,6 +1,7 @@
 package com.example.contacts.data.common.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "contact")
@@ -12,5 +13,7 @@ data class ContactEntity(
     val phone: String,
     val ringtone: String,
     val note: String?,
-    val avatar: String?
+    val avatar: String?,
+    val favourite: Boolean = false,
+    val fullName: String = "$firstName $lastName"
 )

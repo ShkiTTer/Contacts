@@ -10,7 +10,8 @@ fun ContactEntity.toDomain() = Contact(
     phone = phone,
     ringtone = ringtone,
     note = note,
-    avatar = avatar
+    avatar = avatar,
+    favourite = favourite
 )
 
 fun Contact.toDb() = ContactEntity(
@@ -20,5 +21,6 @@ fun Contact.toDb() = ContactEntity(
     phone = phone,
     ringtone = ringtone,
     note = note,
-    avatar = avatar
+    avatar = avatar,
+    favourite = favourite
 )

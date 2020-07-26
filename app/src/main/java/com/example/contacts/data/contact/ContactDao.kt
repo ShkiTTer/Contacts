@@ -23,6 +23,6 @@ interface ContactDao {
     @Query("Delete From contact WHERE id = :contactId")
     fun deleteContact(contactId: Long)
 
-    @Query("Select * From contact Where firstName like :query Order by firstName")
+    @Query("Select * From contact Where fullName like '%' || :query || '%' Order by firstName")
     fun searchContacts(query: String): List<ContactEntity>
 }
