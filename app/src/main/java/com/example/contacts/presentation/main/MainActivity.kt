@@ -10,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.contacts.R
+import com.example.contacts.presentation.common.extentions.requirePermission
 import com.example.contacts.presentation.contactslist.ContactsListFragment
 import com.example.contacts.presentation.editcontact.EditContactActivity
 import com.google.android.material.navigation.NavigationView

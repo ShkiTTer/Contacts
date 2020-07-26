@@ -36,7 +36,6 @@ class ContactActivity : AppCompatActivity() {
 
         binding.apply {
             lifecycleOwner = this@ContactActivity
-            contact = viewModel.contact
         }
 
         initToolbar()
@@ -47,6 +46,7 @@ class ContactActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        binding.contact = viewModel.contact
         viewModel.contact.observe(this, Observer {
             if (it == null) finish()
         })

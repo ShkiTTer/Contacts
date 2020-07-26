@@ -1,7 +1,9 @@
 package com.example.contacts.presentation.editcontact
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.LayoutInflater
@@ -11,11 +13,13 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityEditContactBinding
 import com.example.contacts.presentation.common.extentions.getExtra
 import com.example.contacts.presentation.common.extentions.requirePermission
+import com.example.contacts.presentation.common.utils.IntentUtils
 import kotlinx.android.synthetic.main.dialog_note.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -23,6 +27,9 @@ import org.koin.core.parameter.parametersOf
 class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelectPhotoListener {
     companion object {
         private const val EXTRA_CONTACT_ID = "contact_id"
+
+        private const val RC_CAMERA = 0
+        private const val RC_GALLERY = 1
 
         fun newIntent(context: Context) =
             Intent(context, EditContactActivity::class.java)
@@ -77,12 +84,35 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) return
+
+        when (requestCode) {
+            RC_GALLERY -> {
+                data?.data?.let {
+                    contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    loadPhotoFromGallery(it)
+                }
+            }
+
+            RC_CAMERA -> {
+
+            }
+        }
+    }
+
     override fun takeByCamera() {
         TODO("Not yet implemented")
     }
 
     override fun takeByGallery() {
-        TODO("Not yet implemented")
+        IntentUtils.createImageGalleryIntent().apply {
+            startActivityForResult(this, RC_GALLERY)
+        }
+
+        (supportFragmentManager.findFragmentByTag(SelectPhotoBottomSheet.TAG) as DialogFragment).dismiss()
     }
 
     private fun initToolbar() {
@@ -96,6 +126,11 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
                 if (it) finish()
             })
         }
+    }
+
+    private fun loadPhotoFromGallery(uri: Uri) {
+        viewModel.contact.value?.avatar = uri.toString()
+        binding.invalidateAll()
     }
 
     private fun showBottomSheet() {
