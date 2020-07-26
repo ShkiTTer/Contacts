@@ -49,6 +49,8 @@
     <string name="text_take_photo">Take photo</string>
     <string name="text_choose_photo">Choose photo</string>
 
+    <string name="error_deny_permission">Permissions are required to use this feature</string>
+
     <string-array name="array_ringtone">
         <item>Default</item>
         <item>Oreo</item>

@@ -1,18 +1,28 @@
 package com.example.contacts.presentation.editcontact
 
 import android.app.Application
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.core.content.FileProvider
 import androidx.lifecycle.*
 import com.example.contacts.R
 import com.example.contacts.domain.contact.IContactUseCase
 import com.example.contacts.presentation.common.converters.toDomain
 import com.example.contacts.presentation.common.converters.toUi
 import com.example.contacts.presentation.common.model.ContactUi
+import com.example.contacts.presentation.common.utils.DateTimeUtils
+import java.io.File
 
 class EditContactViewModel(
     private val app: Application,
     private val contactUseCase: IContactUseCase,
     val contactId: Long?
 ) : AndroidViewModel(app) {
+
+    companion object {
+        private const val FILE_EXTENSION = ".jpg"
+    }
 
     val ringtoneList: List<String> by lazy {
         app.resources.getStringArray(R.array.array_ringtone).toList()
@@ -53,6 +63,14 @@ class EditContactViewModel(
                     }
             }
         }
+    }
+
+    fun createNewFile(): Uri {
+        val timeStamp = DateTimeUtils.getTimeStamp()
+        val dir = app.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val file = File.createTempFile(timeStamp, FILE_EXTENSION, dir)
+
+        return FileProvider.getUriForFile(app.applicationContext, "${app.getString(R.string.app_id)}.fileprovider", file)
     }
 
     private fun addContact(): LiveData<Boolean> {

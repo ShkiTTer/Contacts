@@ -42,7 +42,9 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
     private val viewModel: EditContactViewModel by viewModel {
         parametersOf(getExtra(EXTRA_CONTACT_ID))
     }
+
     private lateinit var binding: ActivityEditContactBinding
+    private lateinit var photoUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,27 +94,44 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
         when (requestCode) {
             RC_GALLERY -> {
                 data?.data?.let {
-                    contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    loadPhotoFromGallery(it)
+                    contentResolver.takePersistableUriPermission(
+                        it,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+
+                    loadPhoto(it)
+                    hideBottomSheet()
                 }
             }
 
             RC_CAMERA -> {
-
+                loadPhoto(photoUri)
+                hideBottomSheet()
             }
         }
     }
 
     override fun takeByCamera() {
-        TODO("Not yet implemented")
+        requirePermission(
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            {
+                val uri = viewModel.createNewFile()
+                photoUri = uri
+
+                IntentUtils.createCaptureCameraIntent(packageManager, uri)?.let {
+                    startActivityForResult(it, RC_CAMERA)
+                }
+            },
+            {
+                initErrorDialog(getString(R.string.error_deny_permission)).show()
+            }
+        )
     }
 
     override fun takeByGallery() {
         IntentUtils.createImageGalleryIntent().apply {
             startActivityForResult(this, RC_GALLERY)
         }
-
-        (supportFragmentManager.findFragmentByTag(SelectPhotoBottomSheet.TAG) as DialogFragment).dismiss()
     }
 
     private fun initToolbar() {
@@ -126,16 +145,6 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
                 if (it) finish()
             })
         }
-    }
-
-    private fun loadPhotoFromGallery(uri: Uri) {
-        viewModel.contact.value?.avatar = uri.toString()
-        binding.invalidateAll()
-    }
-
-    private fun showBottomSheet() {
-        SelectPhotoBottomSheet.newInstance()
-            .show(supportFragmentManager, SelectPhotoBottomSheet.TAG)
     }
 
     private fun initView() {
@@ -153,13 +162,7 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
             }
 
             btnChangeAvatar.setOnClickListener {
-                requirePermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    {
-                        showBottomSheet()
-                    },
-                    {
-                        showBottomSheet()
-                    })
+                showBottomSheet()
             }
         }
     }
@@ -214,5 +217,20 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
             .setMessage(error)
             .setPositiveButton(R.string.dialog_error_positive_button, null)
             .create()
+    }
+
+    private fun loadPhoto(uri: Uri) {
+        viewModel.contact.value?.avatar = uri.toString()
+        binding.invalidateAll()
+    }
+
+    private fun showBottomSheet() {
+        SelectPhotoBottomSheet.newInstance()
+            .show(supportFragmentManager, SelectPhotoBottomSheet.TAG)
+    }
+
+    private fun hideBottomSheet() {
+        (supportFragmentManager.findFragmentByTag(SelectPhotoBottomSheet.TAG) as? DialogFragment)
+            ?.dismiss()
     }
 }
