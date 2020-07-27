@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityContactBinding
 import com.example.contacts.presentation.common.extentions.getExtra
+import com.example.contacts.presentation.common.extentions.showLongToast
 import com.example.contacts.presentation.editcontact.EditContactActivity
 import kotlinx.android.synthetic.main.activity_contact.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -80,6 +81,11 @@ class ContactActivity : AppCompatActivity() {
                 viewModel.changeFavourite().observe(this, Observer {
                     if (it) {
                         invalidateOptionsMenu()
+
+                        showLongToast(
+                            if (viewModel.isFavourite()) R.string.message_contact_added_favourites
+                            else R.string.message_contact_delete_favourites
+                        )
                     }
                 })
             }

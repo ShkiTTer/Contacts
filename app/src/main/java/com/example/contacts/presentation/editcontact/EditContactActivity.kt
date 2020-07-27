@@ -19,6 +19,7 @@ import com.example.contacts.R
 import com.example.contacts.databinding.ActivityEditContactBinding
 import com.example.contacts.presentation.common.extentions.getExtra
 import com.example.contacts.presentation.common.extentions.requirePermission
+import com.example.contacts.presentation.common.extentions.showLongToast
 import com.example.contacts.presentation.common.utils.IntentUtils
 import kotlinx.android.synthetic.main.dialog_note.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -78,7 +79,10 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
         when (item.itemId) {
             R.id.action_delete -> {
                 viewModel.deleteContact().observe(this, Observer {
-                    if (it) finish()
+                    if (it) {
+                        showLongToast(R.string.message_contact_deleted)
+                        finish()
+                    }
                 })
             }
         }
@@ -142,7 +146,13 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
 
         binding.toolbar.setNavigationOnClickListener {
             viewModel.saveContact().observe(this, Observer {
-                if (it) finish()
+                if (it) {
+                    showLongToast(
+                        if (viewModel.contactId == null) R.string.message_contact_created
+                        else R.string.message_contact_updated
+                    )
+                    finish()
+                }
             })
         }
     }
@@ -150,7 +160,7 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
     private fun initView() {
         binding.apply {
             etPhone.addTextChangedListener(
-                PhoneNumberFormattingTextWatcher(getString(R.string.phone_number_country_code))
+                PhoneNumberFormattingTextWatcher()
             )
 
             gNote.setOnClickListener {

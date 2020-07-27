@@ -43,8 +43,6 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
             if (it != null) {
                 contactListAdapter.setItems(it)
             }
-
-            println(it)
         })
     }
 

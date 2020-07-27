@@ -69,7 +69,11 @@ class EditContactViewModel(
         val dir = app.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val file = File.createTempFile(timeStamp, FILE_EXTENSION, dir)
 
-        return FileProvider.getUriForFile(app.applicationContext, "${app.getString(R.string.app_id)}.fileprovider", file)
+        return FileProvider.getUriForFile(
+            app.applicationContext,
+            "${app.getString(R.string.app_id)}.fileprovider",
+            file
+        )
     }
 
     private fun addContact(): LiveData<Boolean> {

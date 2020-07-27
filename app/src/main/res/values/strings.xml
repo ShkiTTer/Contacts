@@ -43,13 +43,18 @@
     <string name="error_empty_fields">Please fill in the input fields</string>
     <string name="error_save">Saving error. Try again</string>
     <string name="error_delete">Deleting error. Try again</string>
+    <string name="error_deny_permission">Permissions are required to use this feature</string>
     <string name="dialog_error_positive_button">OK</string>
     <string name="title_select_photo">Select a photo</string>
 
     <string name="text_take_photo">Take photo</string>
     <string name="text_choose_photo">Choose photo</string>
 
-    <string name="error_deny_permission">Permissions are required to use this feature</string>
+    <string name="message_contact_deleted">Contact deleted</string>
+    <string name="message_contact_updated">Contact updated</string>
+    <string name="message_contact_created">Contact created</string>
+    <string name="message_contact_added_favourites">Contact added to favorites</string>
+    <string name="message_contact_delete_favourites">Contact removed from favorites</string>
 
     <string-array name="array_ringtone">
         <item>Default</item>
