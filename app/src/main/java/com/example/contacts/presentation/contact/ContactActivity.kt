@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -25,6 +27,8 @@ class ContactActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityContactBinding
+    private lateinit var mMenu: Menu
+
     private val viewModel: ContactViewModel by viewModel {
         parametersOf(getExtra(EXTRA_CONTACT_ID))
     }
@@ -36,6 +40,7 @@ class ContactActivity : AppCompatActivity() {
 
         binding.apply {
             lifecycleOwner = this@ContactActivity
+            contact = viewModel.contact
         }
 
         initToolbar()
@@ -43,24 +48,44 @@ class ContactActivity : AppCompatActivity() {
         initObserver()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.contact_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.action_favourite)?.setIcon(
+            if (viewModel.isFavourite()) R.drawable.favourite else R.drawable.not_favourite
+        )
+
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onResume() {
         super.onResume()
 
         binding.contact = viewModel.contact
+
         viewModel.contact.observe(this, Observer {
             if (it == null) finish()
+            else {
+                invalidateOptionsMenu()
+            }
         })
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.contact.removeObservers(this)
-    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_favourite -> {
+                viewModel.changeFavourite().observe(this, Observer {
+                    if (it) {
+                        invalidateOptionsMenu()
+                    }
+                })
+            }
+        }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.contact_menu, menu)
-
-        return super.onCreateOptionsMenu(menu)
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initToolbar() {
@@ -80,7 +105,15 @@ class ContactActivity : AppCompatActivity() {
 
     private fun initObserver() {
         viewModel.error.observe(this, Observer {
-            // TODO: Show error dialog
+            initErrorDialog(it).show()
         })
+    }
+
+    private fun initErrorDialog(error: String): AlertDialog {
+        return AlertDialog.Builder(this)
+            .setTitle(R.string.title_dialog_error)
+            .setMessage(error)
+            .setPositiveButton(R.string.dialog_error_positive_button, null)
+            .create()
     }
 }

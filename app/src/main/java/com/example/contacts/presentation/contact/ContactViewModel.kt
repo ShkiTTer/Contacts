@@ -12,17 +12,17 @@ class ContactViewModel(
     val contactId: Long
 ) : AndroidViewModel(app) {
 
-    val contact
-        get() = readContact()
+    private lateinit var contactValue: Contact
 
     private val mError = MutableLiveData<String>()
     val error: LiveData<String> = mError
 
-    private fun readContact(): LiveData<Contact?> {
-        return contactUseCase.getContactById(contactId).switchMap { result ->
+    val contact
+        get() = contactUseCase.getContactById(contactId).switchMap { result ->
             liveData {
                 result
                     .onSuccess {
+                        if (it != null) contactValue = it
                         emit(it)
                     }
                     .onFailure {
@@ -30,5 +30,23 @@ class ContactViewModel(
                     }
             }
         }
+
+    fun changeFavourite(): LiveData<Boolean> {
+        contactValue.favourite = !contactValue.favourite
+
+        return contactUseCase.updateContact(contactValue).switchMap { result ->
+            liveData {
+                result
+                    .onSuccess {
+                        emit(it)
+                    }
+                    .onFailure {
+                        mError.postValue(app.getString(R.string.error_save))
+                        emit(false)
+                    }
+            }
+        }
     }
+
+    fun isFavourite(): Boolean = contactValue.favourite
 }

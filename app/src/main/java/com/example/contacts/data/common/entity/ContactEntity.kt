@@ -14,6 +14,6 @@ data class ContactEntity(
     val ringtone: String,
     val note: String?,
     val avatar: String?,
-    val favourite: Boolean = false,
+    val favourite: Boolean,
     val fullName: String = "$firstName $lastName"
 )

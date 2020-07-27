@@ -11,11 +11,12 @@ class ContactsListViewModel(
 
     val searchQuery = MutableLiveData<String>(String())
 
-    val contacts = Transformations.switchMap(searchQuery) {
-        if (it.isNullOrEmpty()) {
-            readContacts()
-        } else searchContacts(it)
-    }
+    val contacts
+        get() = Transformations.switchMap(searchQuery) {
+            if (it.isNullOrEmpty()) {
+                readContacts()
+            } else searchContacts(it)
+        }
 
     private fun readContacts() = contactUseCase.getContacts().switchMap { result ->
         liveData {
@@ -30,15 +31,16 @@ class ContactsListViewModel(
     }
 
 
-    private fun searchContacts(query: String) = contactUseCase.searchContacts(query).switchMap { result ->
-        liveData {
-            result
-                .onSuccess {
-                    emit(it)
-                }
-                .onFailure {
+    private fun searchContacts(query: String) =
+        contactUseCase.searchContacts(query).switchMap { result ->
+            liveData {
+                result
+                    .onSuccess {
+                        emit(it)
+                    }
+                    .onFailure {
 
-                }
+                    }
+            }
         }
-    }
 }

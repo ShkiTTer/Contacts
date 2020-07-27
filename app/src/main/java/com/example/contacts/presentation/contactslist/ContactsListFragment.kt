@@ -90,11 +90,6 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
 
             searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
 
-            searchView.setOnCloseListener {
-                // TODO: Update list
-                true
-            }
-
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     viewModel.searchQuery.value = newText

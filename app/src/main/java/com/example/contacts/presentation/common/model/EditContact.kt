@@ -7,5 +7,6 @@ data class EditContact(
     var phone : String = String(),
     var ringtone: String = String(),
     var note: String? = null,
-    var avatar: String? = null
+    var avatar: String? = null,
+    val favourite: Boolean = false
 )

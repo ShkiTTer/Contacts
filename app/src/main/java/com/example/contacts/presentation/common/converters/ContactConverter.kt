@@ -10,7 +10,8 @@ fun EditContact.toDomain() = Contact(
     phone = phone,
     ringtone = ringtone,
     note = note,
-    avatar = avatar
+    avatar = avatar,
+    favourite = favourite
 )
 
 fun Contact.toUi() = EditContact(
@@ -20,5 +21,6 @@ fun Contact.toUi() = EditContact(
     phone = phone,
     ringtone = ringtone,
     note = note,
-    avatar = avatar
+    avatar = avatar,
+    favourite = favourite
 )
