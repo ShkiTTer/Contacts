@@ -20,7 +20,6 @@ class ContactListItemDecoration(private val callback: HeaderCallback) :
         if (!this::headerView.isInitialized) {
             headerView = inflateHeader(parent)
             tvHeader = headerView.tvHeader
-            fixLayoutSize(headerView, parent)
         }
 
         var prevTitle = ""
@@ -32,6 +31,7 @@ class ContactListItemDecoration(private val callback: HeaderCallback) :
             tvHeader.text = title
 
             if (!prevTitle.equals(title, true) || callback.isHeader(pos)) {
+                fixLayoutSize(headerView, parent)
                 drawHeader(c, child, headerView)
                 prevTitle = title
             }
