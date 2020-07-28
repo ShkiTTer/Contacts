@@ -28,7 +28,6 @@ class ContactActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityContactBinding
-    private lateinit var mMenu: Menu
 
     private val viewModel: ContactViewModel by viewModel {
         parametersOf(getExtra(EXTRA_CONTACT_ID))
