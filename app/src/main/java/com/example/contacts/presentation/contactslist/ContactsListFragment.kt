@@ -13,11 +13,11 @@ import com.example.contacts.R
 import com.example.contacts.domain.common.model.Contact
 import com.example.contacts.presentation.contact.ContactActivity
 import kotlinx.android.synthetic.main.fragment_contacts_list.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
-    private val viewModel: ContactsListViewModel by viewModel()
-    private lateinit var callback: ContactsListNavigation
+    private val viewModel: ContactsListViewModel by sharedViewModel()
+    private var callback: ContactsListNavigation? = null
     private lateinit var contactListAdapter: ContactListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callback = context as ContactsListNavigation
+        callback = context as? ContactsListNavigation
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +59,7 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
 
     private fun initView() {
         fabNew.setOnClickListener {
-            callback.onNewClick()
+            callback?.onNewClick()
         }
 
         contactListAdapter = ContactListAdapter().apply {
