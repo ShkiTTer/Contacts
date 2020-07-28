@@ -35,7 +35,7 @@ class EditContactActivity : AppCompatActivity(), SelectPhotoBottomSheet.OnSelect
         fun newIntent(context: Context) =
             Intent(context, EditContactActivity::class.java)
 
-        fun newIntent(context: Context, contactId: Long) =
+        fun newIntent(context: Context, contactId: Long?) =
             Intent(context, EditContactActivity::class.java)
                 .putExtra(EXTRA_CONTACT_ID, contactId)
     }

@@ -9,7 +9,7 @@ import com.example.contacts.domain.contact.IContactUseCase
 class ContactViewModel(
     private val app: Application,
     private val contactUseCase: IContactUseCase,
-    val contactId: Long
+    val contactId: Long?
 ) : AndroidViewModel(app) {
 
     private lateinit var contactValue: Contact
@@ -18,17 +18,22 @@ class ContactViewModel(
     val error: LiveData<String> = mError
 
     val contact
-        get() = contactUseCase.getContactById(contactId).switchMap { result ->
-            liveData {
-                result
-                    .onSuccess {
-                        if (it != null) contactValue = it
-                        emit(it)
-                    }
-                    .onFailure {
-                        mError.postValue(app.getString(R.string.error_internal))
-                    }
+        get() = if (contactId != null) {
+            contactUseCase.getContactById(contactId).switchMap { result ->
+                liveData {
+                    result
+                        .onSuccess {
+                            if (it != null) contactValue = it
+                            emit(it)
+                        }
+                        .onFailure {
+                            mError.postValue(app.getString(R.string.error_internal))
+                        }
+                }
             }
+        } else {
+            mError.value = app.getString(R.string.error_internal)
+            MutableLiveData()
         }
 
     fun changeFavourite(): LiveData<Boolean> {
