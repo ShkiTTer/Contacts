@@ -3,6 +3,7 @@ package com.example.contacts.presentation.contactslist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contacts.R
 import com.example.contacts.databinding.ItemContactBinding
@@ -13,6 +14,7 @@ class ContactListAdapter : RecyclerView.Adapter<ContactListAdapter.ViewHolder>()
 
     private val items = mutableListOf<Contact>()
     private var onItemClickListener: OnItemClickListener? = null
+    private val diffUtilCallback = ContactListDiffUtilCallback()
 
     override fun getItemCount(): Int = items.size
 
@@ -34,14 +36,18 @@ class ContactListAdapter : RecyclerView.Adapter<ContactListAdapter.ViewHolder>()
     }
 
     fun setItems(items: List<Contact>) {
+        diffUtilCallback.setItems(this.items, items)
+        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+
         this.items.apply {
             clear()
             addAll(items)
         }
-        notifyDataSetChanged()
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    fun addOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         onItemClickListener = listener
     }
 

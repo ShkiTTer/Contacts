@@ -27,6 +27,9 @@ class ContactListItemDecoration(private val callback: HeaderCallback) :
         for (i in 0 until parent.childCount) {
             val child = parent.getChildAt(i)
             val pos = parent.getChildAdapterPosition(child)
+
+            if (pos == RecyclerView.NO_POSITION) continue
+
             val title = callback.getHeaderName(pos)
             tvHeader.text = title
 

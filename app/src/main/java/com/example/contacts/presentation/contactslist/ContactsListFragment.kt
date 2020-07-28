@@ -63,7 +63,7 @@ class ContactsListFragment : Fragment(R.layout.fragment_contacts_list) {
         }
 
         contactListAdapter = ContactListAdapter().apply {
-            addOnItemClickListener(object : ContactListAdapter.OnItemClickListener {
+            setOnItemClickListener(object : ContactListAdapter.OnItemClickListener {
                 override fun onItemClick(contact: Contact) {
                     contact.id ?: return
 
