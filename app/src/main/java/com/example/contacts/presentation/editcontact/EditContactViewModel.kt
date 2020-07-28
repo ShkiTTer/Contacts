@@ -6,7 +6,7 @@ import android.os.Environment
 import androidx.core.content.FileProvider
 import androidx.lifecycle.*
 import com.example.contacts.R
-import com.example.contacts.domain.contact.IContactUseCase
+import com.example.contacts.domain.contact.IContactInteractor
 import com.example.contacts.presentation.common.converters.toDomain
 import com.example.contacts.presentation.common.converters.toUi
 import com.example.contacts.presentation.common.model.EditContact
@@ -15,7 +15,7 @@ import java.io.File
 
 class EditContactViewModel(
     private val app: Application,
-    private val contactUseCase: IContactUseCase,
+    private val contactInteractor: IContactInteractor,
     val contactId: Long?
 ) : AndroidViewModel(app) {
 
@@ -28,7 +28,7 @@ class EditContactViewModel(
     }
 
     val contact = if (contactId != null) {
-        contactUseCase.getContactById(contactId).switchMap { result ->
+        contactInteractor.getContactById(contactId).switchMap { result ->
             liveData {
                 result.onSuccess { emit(it?.toUi()) }
             }
@@ -39,9 +39,30 @@ class EditContactViewModel(
     val error: LiveData<String> = mError
 
     fun saveContact(): LiveData<Boolean> {
-        return if (contactId == null)
-            addContact()
-        else updateContact()
+        val contactValue = contact.value
+
+        if (contactValue == null) {
+            mError.value = app.getString(R.string.error_internal)
+            return MutableLiveData(false)
+        }
+
+        if (!validateContact(contactValue)) {
+            mError.value = app.getString(R.string.error_empty_fields)
+            return MutableLiveData(false)
+        }
+
+        return contactInteractor.saveContact(contactValue.toDomain()).switchMap { result ->
+            liveData {
+                result
+                    .onSuccess {
+                        emit(it)
+                    }
+                    .onFailure {
+                        mError.postValue(app.getString(R.string.error_save))
+                        emit(false)
+                    }
+            }
+        }
     }
 
     fun deleteContact(): LiveData<Boolean> {
@@ -50,7 +71,7 @@ class EditContactViewModel(
             return MutableLiveData(false)
         }
 
-        return contactUseCase.deleteContact(contactId).switchMap { result ->
+        return contactInteractor.deleteContact(contactId).switchMap { result ->
             liveData {
                 result
                     .onSuccess {
@@ -74,60 +95,6 @@ class EditContactViewModel(
             "${app.getString(R.string.app_id)}.fileprovider",
             file
         )
-    }
-
-    private fun addContact(): LiveData<Boolean> {
-        val contactValue = contact.value
-
-        if (contactValue == null) {
-            mError.value = app.getString(R.string.error_internal)
-            return MutableLiveData(false)
-        }
-
-        if (!validateContact(contactValue)) {
-            mError.value = app.getString(R.string.error_empty_fields)
-            return MutableLiveData(false)
-        }
-
-        return contactUseCase.addContact(contactValue.toDomain()).switchMap { result ->
-            liveData {
-                result
-                    .onSuccess {
-                        emit(it)
-                    }
-                    .onFailure {
-                        mError.postValue(app.getString(R.string.error_save))
-                        emit(false)
-                    }
-            }
-        }
-    }
-
-    private fun updateContact(): LiveData<Boolean> {
-        val contactValue = contact.value
-
-        if (contactValue == null) {
-            mError.value = app.getString(R.string.error_internal)
-            return MutableLiveData(false)
-        }
-
-        if (!validateContact(contactValue)) {
-            mError.value = app.getString(R.string.error_empty_fields)
-            return MutableLiveData(false)
-        }
-
-        return contactUseCase.updateContact(contactValue.toDomain()).switchMap { result ->
-            liveData {
-                result
-                    .onSuccess {
-                        emit(it)
-                    }
-                    .onFailure {
-                        mError.postValue(app.getString(R.string.error_save))
-                        emit(false)
-                    }
-            }
-        }
     }
 
     private fun validateContact(contactValue: EditContact): Boolean =

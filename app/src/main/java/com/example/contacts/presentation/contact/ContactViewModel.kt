@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.contacts.R
 import com.example.contacts.domain.common.model.Contact
-import com.example.contacts.domain.contact.IContactUseCase
+import com.example.contacts.domain.contact.IContactInteractor
 
 class ContactViewModel(
     private val app: Application,
-    private val contactUseCase: IContactUseCase,
+    private val contactInteractor: IContactInteractor,
     val contactId: Long?
 ) : AndroidViewModel(app) {
 
@@ -19,7 +19,7 @@ class ContactViewModel(
 
     val contact
         get() = if (contactId != null) {
-            contactUseCase.getContactById(contactId).switchMap { result ->
+            contactInteractor.getContactById(contactId).switchMap { result ->
                 liveData {
                     result
                         .onSuccess {
@@ -39,7 +39,7 @@ class ContactViewModel(
     fun changeFavourite(): LiveData<Boolean> {
         contactValue.favourite = !contactValue.favourite
 
-        return contactUseCase.updateContact(contactValue).switchMap { result ->
+        return contactInteractor.saveContact(contactValue).switchMap { result ->
             liveData {
                 result
                     .onSuccess {
