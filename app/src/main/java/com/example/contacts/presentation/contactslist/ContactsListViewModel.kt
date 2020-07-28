@@ -9,7 +9,7 @@ class ContactsListViewModel(
     private val contactUseCase: IContactUseCase
 ) : AndroidViewModel(app) {
 
-    val searchQuery = MutableLiveData<String>(String())
+    val searchQuery = MutableLiveData<String>("")
 
     val contacts
         get() = Transformations.switchMap(searchQuery) {
